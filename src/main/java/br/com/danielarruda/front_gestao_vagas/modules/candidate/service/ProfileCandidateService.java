@@ -8,11 +8,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import br.com.danielarruda.front_gestao_vagas.modules.candidate.dto.ProfileUserDTO;
+
 @Service
 public class ProfileCandidateService {
     
 
-    public String execute(String token) {
+    public ProfileUserDTO execute(String token) {
         RestTemplate rt = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -20,7 +22,7 @@ public class ProfileCandidateService {
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(headers);
 
-        var result = rt.exchange("http://localhost:8080/candidate/", HttpMethod.GET, request, String.class);
+        var result = rt.exchange("http://localhost:8080/candidate/", HttpMethod.GET, request, ProfileUserDTO.class);
         System.out.println(result);
 
         return result.getBody();
