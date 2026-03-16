@@ -1,6 +1,7 @@
 package br.com.danielarruda.front_gestao_vagas.modules.candidate.controller;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.danielarruda.front_gestao_vagas.modules.candidate.dto.JobDTO;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.CandidateService;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.FindJobsService;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.ProfileCandidateService;
@@ -92,8 +94,8 @@ public class CandidateController {
     public String jobs(Model model, String filter) {
         try{
             if ( filter != null ) {
-                findJobsService.execute(getToken(), filter);
-                //model.addAttribute("jobs", filter);
+                List<JobDTO> jobs = findJobsService.execute(getToken(), filter);
+                model.addAttribute("jobs", jobs);
             }
         } catch (HttpClientErrorException e) {
             return "redirect:/candidate/login";
