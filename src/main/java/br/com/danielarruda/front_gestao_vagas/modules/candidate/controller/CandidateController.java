@@ -3,6 +3,7 @@ package br.com.danielarruda.front_gestao_vagas.modules.candidate.controller;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.dto.JobDTO;
+import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.ApplyJobService;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.CandidateService;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.FindJobsService;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.ProfileCandidateService;
@@ -45,6 +47,9 @@ public class CandidateController {
 
     @Autowired
     private FindJobsService findJobsService;
+
+    @Autowired
+    private ApplyJobService applyJobService;
 
     @GetMapping("/login")
     public String login() {
@@ -105,6 +110,14 @@ public class CandidateController {
         return "candidate/jobs";
     }
     
+    @PostMapping("/jobs/apply")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public String applJob(@RequestParam("jobId") UUID jobId) {
+        this.applyJobService.execute(getToken(), jobId);
+        return "redirect:/candidate/jobs";
+    }
+    
+
     private String getToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getDetails().toString();
