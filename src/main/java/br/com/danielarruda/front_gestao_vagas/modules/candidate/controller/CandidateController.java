@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.danielarruda.front_gestao_vagas.modules.candidate.dto.CreateCandidateDTO;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.dto.JobDTO;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.ApplyJobService;
 import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.CandidateService;
@@ -57,9 +58,17 @@ public class CandidateController {
     }
     
     @GetMapping("/create")
-    public String create() {
+    public String create(Model model) {
+        model.addAttribute("candidate", new CreateCandidateDTO());
         return "candidate/create";
     }
+
+    @PostMapping("/create")
+    public String save(CreateCandidateDTO candidate, Model model) {  
+        model.addAttribute("candidate", candidate);
+        return "/candidate/create";
+    }
+    
     @PostMapping("/signIn")
     public String signIn(RedirectAttributes redirectAttributes, HttpSession session, String username, String password) {
         try {
