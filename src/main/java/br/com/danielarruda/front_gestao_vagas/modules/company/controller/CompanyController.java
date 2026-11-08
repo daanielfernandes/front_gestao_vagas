@@ -105,6 +105,13 @@ public class CompanyController {
         return "company/create";
     }
     
+    @GetMapping("/jobs/list")
+    @PreAuthorize("hasRole('COMPANY')")
+    public String list(Model model) {
+        model.addAttribute("jobs", new CreateJobsDTO());
+        return "company/list";
+    }
+
     private String getToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getDetails().toString();
