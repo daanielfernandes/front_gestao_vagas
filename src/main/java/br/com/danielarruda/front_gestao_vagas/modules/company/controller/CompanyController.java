@@ -11,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import org.springframework.security.core.Authentication;
+import br.com.danielarruda.front_gestao_vagas.modules.candidate.dto.CreateJobsDTO;
+import br.com.danielarruda.front_gestao_vagas.modules.candidate.service.CreateJobService;
 import br.com.danielarruda.front_gestao_vagas.modules.company.dto.CreateCompanyDTO;
 import br.com.danielarruda.front_gestao_vagas.modules.company.service.CreateCompanyService;
 import br.com.danielarruda.front_gestao_vagas.modules.company.service.LoginCompanyService;
@@ -35,6 +37,9 @@ public class CompanyController {
 
     @Autowired
     private LoginCompanyService loginCompanyService;
+
+    @Autowired 
+    private CreateJobService createJobService;
 
     @GetMapping("/login")
     public String login() {
@@ -65,10 +70,21 @@ public class CompanyController {
 
     @GetMapping("/jobs")
     @PreAuthorize("hasRole('COMPANY')")
-    public String jobs() {
+    public String jobs(Model model) {
+        model.addAttribute("jobs", new CreateJobsDTO());
         return "company/jobs";
     }
     
+    @PostMapping("/jobs")
+    @PreAuthorize("hasRole('COMPANY')")
+    public String createJobs(CreateJobsDTO  job) {
+        var result = this.createJobService.execute(job, getToken());
+        
+        System.out.println(result);
+        return "redirect:/company/jobs";
+    }
+    
+
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("company", new CreateCompanyDTO());
@@ -89,4 +105,8 @@ public class CompanyController {
         return "company/create";
     }
     
+    private String getToken() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getDetails().toString();
+    }
 }
