@@ -1,4 +1,4 @@
-package br.com.danielarruda.front_gestao_vagas.modules.candidate.service;
+package br.com.danielarruda.front_gestao_vagas.modules.company.service;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
