@@ -82,10 +82,8 @@ public class CompanyController {
     @PostMapping("/jobs")
     @PreAuthorize("hasRole('COMPANY')")
     public String createJobs(CreateJobsDTO  job) {
-        var result = this.createJobService.execute(job, getToken());
-        
-        System.out.println(result);
-        return "redirect:/company/jobs";
+        var result = this.createJobService.execute(job, getToken());  
+        return  "redirect:/company/jobs/list";
     }
     
 
